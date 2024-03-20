@@ -1,0 +1,24 @@
+{% include "header.html" %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="register">
+        <h2>Register</h2>
+        <form action="/register" method="post">
+            <label for="nom">Username:</label>
+            <input type="text" id="nom" name="nom" required>
+            <label for="mot_de_passe">Password:</label>
+            <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
+{% include "footer.html" %}

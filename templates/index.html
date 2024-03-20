@@ -1,0 +1,36 @@
+{% include 'header.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" type="image/png" href="/static/images/favicon-32x32.png">
+    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+</head>
+
+<div class="container0">
+    <div class="intro">
+        <h1>Bienvenue sur DataFiller, {{ username }}</h1>
+        <p>
+            Notre plateforme avancée utilise des modèles d'intelligence artificielle de pointe pour analyser vos fichiers CSV,
+            détecter les lacunes, et les compléter avec une précision. 
+            Que vous soyez un professionnel de la data, un chercheur ou une entreprise cherchant à maximiser l'exploitation de vos données,
+            DataFiller est l'outil qu'il vous faut.
+        </p>
+    </div>
+    
+</div>
+<div class="container1">
+    <form action="/upload-csv" method="post" enctype="multipart/form-data">
+        <h3>
+            Prêt à Transformer Vos Données ?
+        </h3>
+        <input type="file" name="file" accept=".csv">
+        <button type="submit">Upload CSV</button>
+    </form>
+</div>
+</html>
+{% include 'footer.html' %}

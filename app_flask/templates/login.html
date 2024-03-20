@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+
+
+{% block content %}
+{% if erreur %}
+    <div style="color: red;">{{ erreur }}</div>
+{% endif %}
+
+<div id="auth">
+    <!-- Formulaire de Connexion -->
+    <form action="{{ url_for('login') }}" method="post">
+        <input type="text" name="username" placeholder="Nom d'utilisateur">
+        <input type="password" name="password" placeholder="Mot de passe">
+        <button type="submit">Se connecter</button>
+    </form>
+    
+
+    <!-- Lien vers la page d'enregistrement -->
+    <p>Vous n'avez pas de compte ? <a href="{{ url_for('register') }}">S'enregistrer</a></p>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+

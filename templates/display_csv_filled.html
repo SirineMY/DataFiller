@@ -1,0 +1,43 @@
+
+{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/images/favicon-32x32.png">
+    <title>CSV Filled Display</title>
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="csv-details">
+        <h1 class="mt-5">Résultats après traitement du fichier CSV</h1>
+        <div class="alert alert-info" role="alert">
+            Nom du fichier traité : {{ file_name }}
+        </div>
+    
+        <h2>Statistiques des données</h2>
+        <p>Nombre de lignes : {{ num_rows }}</p>
+        <p>Nombre de colonnes : {{ num_columns }}</p>
+        <p>Pourcentage de cellules vides : {{ percent_empty_cells }}%</p>
+        <h3>Types de données par colonne:</h3>
+        <ul>
+            {% for col, dtype in column_types.items() %}
+            <li>{{ col }} : {{ dtype }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="csv-data-display">
+        <h2>Aperçu des données:</h2>
+        {{ df_html | safe }}
+        <form action="{{ url_for('download_csv', file_name=file_name) }}" method="get">
+            <button type="submit">Télécharger le CSV rempli</button>
+        </form>
+        
+    </div>
+    
+
+</body>
+</html>
+{% include 'footer.html' %}
+

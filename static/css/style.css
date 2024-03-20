@@ -1,0 +1,294 @@
+/* style.css */
+
+/* Réinitialisation de certains styles par défaut*/
+html{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container0 {
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px 20px;
+    background-color: #f4f6f9;
+    margin-top: 50px;
+    border-radius: 15px;
+    box-shadow: 0 5px 10px rgba(34, 30, 30, 0.248);
+}
+
+.container1 {
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px 20px;
+    background-color: #f4f6f9;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 10px rgba(34, 30, 30, 0.248);
+}
+.container1 button{
+    display: block;
+    background: #007FA9;
+    color: #efeaea;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: auto; /* Ajoutez ceci pour centrer le bouton */
+    margin-right: auto; /* Ajoutez ceci pour centrer le bouton */
+    border-radius: 8px; /* Ajoutez un rayon de bordure pour arrondir les coins */
+    font-size: 18px;
+}
+.content h2, .content h3 {
+    color: #333;
+}
+.content h1{
+    color:rgb(250, 238, 238)
+}
+
+.intro p, .container div, .container1 form {
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    font-size: 30px; 
+    color: #f2e9e9; /* Couleur du texte */
+    margin: 0; /* Supprimer les marges par défaut */
+}
+
+/* Bouton d'envoi */
+button {
+    display: inline-block;
+    background: #007FA9;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button:hover {
+    background: #82CFD8;
+}
+
+/* Personnalisation du champ de fichier */
+input[type="file"] {
+    margin-top: 20px;
+}
+
+/* Alertes */
+.alert {
+    padding: 20px 20px;
+    background-color: #f44336;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    background-color: #9CD2D5;
+}
+
+/* Espacement et esthétique */
+.mt-5 {
+    margin-top: 32px;
+}
+
+
+
+/* Adaptation à différentes tailles d'écran */
+@media (max-width: 700px) {
+    .container, .container1 {
+        padding: 0;
+    }
+}
+/* Spécifique à display_csv.html */
+.csv-details {
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #f4f6f9;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 5px rgba(65, 52, 52, 0.1);
+}
+.csv_title {
+
+    color:#007FA9;
+}
+.csv-details h2, h3, h4 {
+    color: #333;
+    margin-top: 20px;
+}
+
+.csv-details ul {
+    list-style-type: none;
+    padding: 8px;
+}
+
+.csv-details li {
+    padding: 8px;
+    background-color: #CEDDDE;
+    border-radius: 10px;
+    border: 1px solid #CEDDDE;
+    margin-top: 8px;
+}
+
+.csv-data-display {
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px 20px;
+    background-color: #f4f6f9;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 5px rgba(65, 52, 52, 0.1);
+    /* overflow-x: auto; */
+}
+
+/* Améliore la visibilité des tableaux affichés */
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: auto; /* Ajoutez ceci pour centrer le bouton */
+    margin-right: auto;
+}
+
+table, th, td {
+    border: 1px solid #CEDDDE;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #9CD2D5;
+}
+
+tr:nth-child(even) {
+    background-color: #9CD2D5;
+}
+.csv-data-display button{
+    display: block;
+    background: #007FA9;
+    color: #efeaea;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: auto; /* Ajoutez ceci pour centrer le bouton */
+    margin-right: auto; /* Ajoutez ceci pour centrer le bouton */
+    border-radius: 8px; /* Ajoutez un rayon de bordure pour arrondir les coins */
+    font-size: 18px;
+}
+.Login{
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #f4f6f9;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 5px rgba(65, 52, 52, 0.1);
+}
+.register{
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+    padding: 0 20px;
+    background-color: #f4f6f9;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 5px rgba(65, 52, 52, 0.1);
+}
+.register button{
+    display: block;
+    background: #007FA9;
+    color: #efeaea;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: auto; 
+    margin-right: auto; 
+    border-radius: 8px; 
+    font-size: 18px;
+}
+.Login button{
+    display: block;
+    background: #007FA9;
+    color: #efeaea;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: auto; 
+    margin-right: auto; 
+    border-radius: 8px; 
+    font-size: 18px;
+}
+.header {
+    overflow: hidden;
+    background-image: url("../images/datamanagement3-e1651832307423.jpg") ;
+    background-repeat: no-repeat;
+    background-position: center; 
+    background-size: cover;
+    padding: 50px 20px;
+    height: 350px;
+}
+.header img.logo {
+    width: 130px; 
+    height: auto; 
+}
+
+form {
+    margin-top: 20px;
+}
+
+input[type="text"], input[type="password"], input[type="file"] {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: calc(100% - 22px);
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+.header a {
+    float: left;
+    color: rgb(250, 238, 238);
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 25px;
+    border-radius: 4px;
+}
+.header a:hover {
+    background-color: #9CD2D5;
+    color: rgb(19, 5, 5);
+}

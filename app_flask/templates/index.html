@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+{% if 'username' in session %}
+        <p>Bienvenue, {{ session['username'] }}!</p>
+        <a href="{{ url_for('logout') }}">Déconnexion</a>
+    {% endif %}
+
+    
+    
+
+    <h1>Bienvenue dans l'application</h1>
+    <!-- Formulaire de téléchargement de fichier CSV -->
+    <section>
+        <h2>Télécharger un fichier CSV</h2>
+        <form action="{{ url_for('upload_csv') }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="fichier">
+            <input type="submit" value="Analyser">
+        </form>
+    </section>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+            <!-- Bouton "Remplir" après les messages flash -->
+            <button onclick="location.href='{{ url_for('remplir') }}'">Remplir</button>
+        {% endif %}
+    {% endwith %}
+    
+{% endblock %}

@@ -1,0 +1,41 @@
+{% include 'header.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/images/favicon-32x32.png">
+    <title>CSV Filled Display</title>
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="csv-details">
+        <h1 class="mt-5">Détails du fichier CSV</h1>
+        
+        <h4 class="csv_title"> Nom du fichier : {{ file_name }}</h4>
+        
+        <h2>Statistiques des données</h2>
+        <p>Nombre de lignes : {{ num_rows }}</p>
+        <p>Nombre de colonnes : {{ num_columns }}</p>
+        <p>Pourcentage de cellules vides : {{ percent_empty_cells }}%</p>
+        <h2>Types de données par colonne:</h2>
+        <ul>
+            {% for column, dtype in column_types.items() %}
+            <li>{{ column }}: {{ dtype }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="csv-data-display">
+        <h2>Aperçu des données:</h2>
+        <div>{{ df_html | safe }}</div>
+        <form action="/fill-csv" method="post">
+            <input type="hidden" name="file_name" value="{{ file_name }}">
+            <button type="submit">Remplir</button>
+        </form>
+    </div>
+
+</body>
+</html>
+{% include 'footer.html' %}
