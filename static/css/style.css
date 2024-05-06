@@ -63,7 +63,8 @@ body {
 .header h1 {
     font-size: 30px; 
     color: #f2e9e9; /* Couleur du texte */
-    margin: 0; /* Supprimer les marges par défaut */
+    margin: 0; 
+    padding: 10px 25px;
 }
 
 /* Bouton d'envoi */
@@ -247,11 +248,12 @@ tr:nth-child(even) {
     background-position: center; 
     background-size: cover;
     padding: 50px 20px;
-    height: 350px;
+    height: 280px;
 }
 .header img.logo {
     width: 130px; 
-    height: auto; 
+    height: auto;
+    padding: 10px 25px; 
 }
 
 form {
@@ -280,13 +282,15 @@ button:hover {
 }
 .header a {
     float: left;
+    background-color: rgb(19, 5, 5);
     color: rgb(250, 238, 238);
     text-align: center;
-    padding: 12px;
+    padding: 20px;
     text-decoration: none;
     font-size: 20px;
     line-height: 25px;
     border-radius: 4px;
+    margin-top: 40px;
 }
 .header a:hover {
     background-color: #9CD2D5;

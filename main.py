@@ -11,6 +11,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from aiofiles import open as aio_open
 from security import hash_password, verify_password
 from database import Utilisateur, get_db, create_tables, Operation, insert_data_sync, save_csv_data, get_current_user
+from models import KNNCustomImputer
 
 app = FastAPI()
 
@@ -29,10 +30,6 @@ templates = Jinja2Templates(directory="templates")
 async def read_root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/login", response_class=HTMLResponse)
-async def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
-
 @app.post("/register", response_class=HTMLResponse)
 async def register_user(request: Request, nom: str = Form(...), mot_de_passe: str = Form(...), db: AsyncSession = Depends(get_db)):
     hashed_password = hash_password(mot_de_passe)  # Utilisation de hash_password
@@ -41,6 +38,10 @@ async def register_user(request: Request, nom: str = Form(...), mot_de_passe: st
         session.add(user)
         await session.commit()
     return templates.TemplateResponse("login.html", {"request": request, "message": "User created successfully"})
+
+@app.get("/register", response_class=HTMLResponse)
+async def get_register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
 
 @app.post("/login", response_class=HTMLResponse)
 async def login_user(request: Request, nom: str = Form(...), mot_de_passe: str = Form(...), db: AsyncSession = Depends(get_db)):
@@ -54,9 +55,9 @@ async def login_user(request: Request, nom: str = Form(...), mot_de_passe: str =
         else:
             return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid username or password"})
 
-@app.get("/register", response_class=HTMLResponse)
-async def get_register(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+@app.get("/login", response_class=HTMLResponse)
+async def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/upload-csv", response_class=HTMLResponse)
 async def upload_csv(request: Request, file: UploadFile = File(...), utilisateur: Utilisateur = Depends(get_current_user)):
@@ -71,12 +72,17 @@ async def upload_csv(request: Request, file: UploadFile = File(...), utilisateur
     await save_csv_data(file.filename, content, utilisateur)
     # Utilisation de StringIO pour lire le contenu comme un fichier CSV
     df = pd.read_csv(StringIO(content.decode("utf-8")))
-    
+    df_numeric = df.select_dtypes(include=['number'])
+
     # Préparation des informations à afficher
     file_name = file.filename
     num_rows = len(df)
     num_columns = len(df.columns)
     total_cells = num_rows * num_columns
+    num_columns_numeric = len(df_numeric.columns)
+    total_numeric_cells = num_rows * num_columns_numeric
+    num_empty_cells_numeric = total_numeric_cells - df_numeric.count().sum()
+    percent_empty_cells_numeric = (num_empty_cells_numeric / total_numeric_cells) * 100 if total_numeric_cells else 0
     num_empty_cells = total_cells - df.count().sum()
     percent_empty_cells = (num_empty_cells / total_cells) * 100 if total_cells else 0
     column_types = df.dtypes.to_dict()
@@ -91,7 +97,8 @@ async def upload_csv(request: Request, file: UploadFile = File(...), utilisateur
         "file_name": file_name,
         "num_rows": num_rows,
         "num_columns": num_columns,
-        "percent_empty_cells": percent_empty_cells,
+    
+        "percent_empty_cells": percent_empty_cells_numeric,
         "column_types": {col: str(dtype) for col, dtype in column_types.items()},
     }
     # Renvoyer le template HTML avec les informations du CSV
@@ -100,10 +107,11 @@ async def upload_csv(request: Request, file: UploadFile = File(...), utilisateur
 @app.post("/fill-csv", response_class=HTMLResponse)
 async def fill_csv(request: Request, file_name: str = Form(...), utilisateur: Utilisateur = Depends(get_current_user)):
     # Chemin vers le modèle .pkl
-    model_path = "C:/Users/utilisateur/2024/E1/model.pkl"
+    model_path = "C:/Users/utilisateur/2024/E1/model01.pkl"
     
     # Charger le modèle
-    model = joblib.load(model_path)
+    # model = joblib.load(model_path)
+    model = KNNCustomImputer()
     UPLOAD_DIR= "C:/Users/utilisateur/2024/E1/data"
     file_location = f"{UPLOAD_DIR}/{file_name}"
 
@@ -112,7 +120,9 @@ async def fill_csv(request: Request, file_name: str = Form(...), utilisateur: Ut
     
     # Suppression des colonnes non numériques
     df_numeriques = df.drop(columns=df.select_dtypes(exclude='number').columns)
-    
+    # Sauvegardez les colonnes non numériques
+    df_non_numeriques = df.select_dtypes(exclude='number')
+
     # Appliquer le modèle aux données
     df_transformed = model.fit_transform(df_numeriques)
     
@@ -120,20 +130,28 @@ async def fill_csv(request: Request, file_name: str = Form(...), utilisateur: Ut
     new_file_name = file_name.rsplit('.', 1)[0] + "_new.csv"
     new_csv_path = f"C:/Users/utilisateur/2024/E1/data/{new_file_name}"
     
+     # Fusionnez les colonnes numériques transformées avec les colonnes non numériques
+    df_imputed = pd.concat([df_transformed.reset_index(drop=True), df_non_numeriques.reset_index(drop=True)], axis=1)
+
     # Enregistrer le DataFrame transformé dans un nouveau fichier CSV
-    df_imputed = pd.DataFrame(df_transformed, columns=df_numeriques.columns)
-    df_imputed.to_csv(new_csv_path, index=False)
+    # f_imputed = pd.DataFrame(df_transformed, columns=df_numeriques.columns)
+    df_imputed.to_csv(new_csv_path, index=False, float_format='%.0f')
 
     # Enregistrer également le fichier transformé dans la base de données
     insert_data_sync(df_imputed, new_file_name.rsplit('.', 1)[0])
 
     # Préparer le DataFrame transformé pour l'affichage
     df_html = df_imputed.head(6).to_html(classes="table table-striped", border=0)
+    df_numeric = df_imputed.select_dtypes(include=['number'])
 
     num_rows = len(df_imputed)
     num_columns = len(df_imputed.columns)
     total_cells = num_rows * num_columns
     num_empty_cells = total_cells - df_imputed.count().sum()
+    num_columns_numeric = len(df_numeric.columns)
+    total_numeric_cells = num_rows * num_columns_numeric
+    num_empty_cells_numeric = total_numeric_cells - df_numeric.count().sum()
+    percent_empty_cells_numeric = (num_empty_cells_numeric / total_numeric_cells) * 100 if total_numeric_cells else 0
     percent_empty_cells = (num_empty_cells / total_cells) * 100 if total_cells else 0
     column_types = df_imputed.dtypes.to_dict()
     
@@ -144,7 +162,7 @@ async def fill_csv(request: Request, file_name: str = Form(...), utilisateur: Ut
         "file_name": new_file_name,
         "num_rows": num_rows,
         "num_columns": num_columns,
-        "percent_empty_cells": percent_empty_cells,
+        "percent_empty_cells": percent_empty_cells_numeric,
         "column_types": {col: str(dtype) for col, dtype in column_types.items()},
     }
     

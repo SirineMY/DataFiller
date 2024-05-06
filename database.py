@@ -1,4 +1,5 @@
 import asyncio
+from sqlalchemy import inspect
 import pandas as pd
 from io import StringIO
 from arrow import now
@@ -73,6 +74,12 @@ def insert_data_sync(df, table_name):
     Cette fonction est conçue pour être exécutée dans un thread séparé.
     """
     df.to_sql(table_name, engine_fichier_csv, if_exists='replace', index=False)
+    
+async def check_table_exists(engine, table_name):
+    async with engine.connect() as conn:
+        # Utilisez conn.run_sync pour exécuter une opération synchrone dans un contexte asynchrone
+        result = await conn.run_sync(lambda sync_conn: inspect(sync_conn).has_table(table_name))
+    return result
 
 # Fonction pour créer une table à partir du nom du fichier et insérer les données
 async def save_csv_data(file_name, content, utilisateur: Utilisateur):
@@ -97,6 +104,8 @@ async def save_csv_data(file_name, content, utilisateur: Utilisateur):
         await session.commit()
 
     table_name = file_name.split('.')[0]
+
+    
 
     # Exécutez l'insertion de manière synchronique dans un thread séparé
     thread = threading.Thread(target=insert_data_sync, args=(df, table_name))
